@@ -1,6 +1,7 @@
 /**
 @module preloader wallet
 */
+const path = require('path')
 const mist = require('../mistAPI.js');
 require('../openExternal.js');
 const BigNumber = require('bignumber.js');
@@ -17,6 +18,14 @@ require('web-frame').setZoomLevelLimits(1, 1);
 // window.dirname = __dirname;
 window.BigNumber = BigNumber;
 window.web3 = new Web3(new Web3.providers.IpcProvider('', ipcProviderWrapper));
+
+// set the base path for relative assets in production mode
+if(require('remote').getGlobal('production')){
+  var base = document.createElement('base');
+  base.href = path.resolve(__dirname + '/../../interface/wallet') + '/';
+  document.getElementsByTagName('head')[0].appendChild(base);
+}
+
 // add admin later
 setTimeout(function(){
     web3Admin.extend(window.web3);
